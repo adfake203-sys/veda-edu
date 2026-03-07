@@ -1,9 +1,9 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HTMLFlipBook from "react-pageflip";
 import { X } from "lucide-react";
-import { useRef } from "react";
 import { colleges } from "./ScholarshipSection";
 
 // To avoid TS errors since react-pageflip lacks modern type definitions
@@ -17,6 +17,13 @@ export default function CollegeBookExperience({
   onClose: () => void 
 }) {
   const bookRef = useRef<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    setIsTablet(window.innerWidth < 1024);
+  }, []);
   
   const college = colleges.find(c => c.id === collegeId) || colleges[0];
 
@@ -46,17 +53,17 @@ export default function CollegeBookExperience({
             className="relative flex items-center justify-center w-full max-w-6xl px-4 md:px-10 h-[70vh] md:h-[80vh]"
           >
             <FlipBook
-              width={typeof window !== 'undefined' && window.innerWidth < 768 ? 320 : 500}
-              height={typeof window !== 'undefined' && window.innerWidth < 768 ? 500 : 700}
+              width={isMobile ? 320 : 500}
+              height={isMobile ? 500 : 700}
               size="stretch"
-              minWidth={typeof window !== 'undefined' && window.innerWidth < 768 ? 280 : 400}
+              minWidth={isMobile ? 280 : 400}
               maxWidth={600}
               minHeight={500}
               maxHeight={800}
               maxShadowOpacity={0.3}
               showCover={false} // Showing spread immediately
               mobileScrollSupport={true}
-              usePortrait={typeof window !== 'undefined' && window.innerWidth < 1024}
+              usePortrait={isTablet}
               className="elite-book shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)]"
               ref={bookRef}
             >

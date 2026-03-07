@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Text, Image as DreiImage, Float } from "@react-three/drei";
 import { motion } from "framer-motion";
@@ -11,6 +11,11 @@ import { colleges } from "./ScholarshipSection";
 function CollegeCard3D({ college, position, onClick }: any) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHover] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   useFrame(() => {
     if (meshRef.current && !hovered) {
@@ -47,7 +52,7 @@ function CollegeCard3D({ college, position, onClick }: any) {
         {/* Text Label - Serif for Elite feel */}
         <Text 
           position={[0, -2.8, 0.1]} 
-          fontSize={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.45 : 0.35} 
+          fontSize={isMobile ? 0.45 : 0.35} 
           color="#fbf8f2" 
           anchorX="center"
           font="https://fonts.gstatic.com/s/playfairdisplay/v30/6NU68F6fe026hH8FCzxO37vycXdw6o8qHCHwdk_v7mOYaDyf.ttf"
@@ -66,6 +71,15 @@ export default function ExploreUniverse({
   onClose: () => void, 
   onOpenBook: (id: number) => void 
 }) {
+  const [isMobile, setIsMobile] = useState(false);
+  const [cameraZ, setCameraZ] = useState(20);
+
+  useEffect(() => {
+    const mobile = window.innerWidth < 768;
+    setIsMobile(mobile);
+    setCameraZ(mobile ? 30 : 20);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -78,7 +92,7 @@ export default function ExploreUniverse({
         onClick={onClose}
         className="absolute top-6 left-6 md:top-10 md:left-10 w-12 h-12 md:w-16 md:h-16 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-white/5 transition-colors z-[110] shadow-elite"
       >
-        <X size={window?.innerWidth < 768 ? 24 : 32} strokeWidth={1} />
+        <X size={isMobile ? 24 : 32} strokeWidth={1} />
       </button>
 
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-[110] text-primary/80 text-[10px] font-bold uppercase tracking-[0.3em] pointer-events-none px-6 md:px-10 py-3 md:py-4 rounded-full border border-primary/10 bg-white/5 backdrop-blur-md flex items-center gap-3 md:gap-4 w-[85%] md:w-auto justify-center">
@@ -87,7 +101,7 @@ export default function ExploreUniverse({
         <span className="hidden md:inline">Click to open digital book</span>
       </div>
 
-      <Canvas camera={{ position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 30 : 20], fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 65 : 55 }}>
+      <Canvas camera={{ position: [0, 0, cameraZ], fov: isMobile ? 65 : 55 }}>
         {/* Space Environment - Warmer/Elite space */}
         <color attach="background" args={['#0c0c0c']} />
         <fog attach="fog" args={['#0c0c0c', 10, 60]} />
@@ -100,18 +114,18 @@ export default function ExploreUniverse({
         <OrbitControls 
           enablePan={false} 
           enableZoom={true} 
-          maxDistance={typeof window !== 'undefined' && window.innerWidth < 768 ? 50 : 40} 
+          maxDistance={isMobile ? 50 : 40} 
           minDistance={10} 
           autoRotate 
           autoRotateSpeed={0.5}
           dampingFactor={0.03}
-          rotateSpeed={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.5 : 1}
+          rotateSpeed={isMobile ? 0.5 : 1}
         />
 
         {colleges.map((college, i) => {
           const phi = Math.acos(-1 + (2 * i) / colleges.length);
           const theta = Math.sqrt(colleges.length * Math.PI) * phi;
-          const r = typeof window !== 'undefined' && window.innerWidth < 768 ? 10 + Math.random() * 3 : 12 + Math.random() * 2;
+          const r = isMobile ? 10 + Math.random() * 3 : 12 + Math.random() * 2;
           
           const x = r * Math.cos(theta) * Math.sin(phi);
           const y = r * Math.sin(theta) * Math.sin(phi);

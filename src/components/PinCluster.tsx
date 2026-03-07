@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { MapPin } from "lucide-react";
 
@@ -16,6 +16,7 @@ const pinsData = [
 
 export default function PinCluster() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Mouse tracking for parallax
   const mouseX = useMotionValue(0);
@@ -35,12 +36,13 @@ export default function PinCluster() {
   const fadeOut = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = (e.clientX / innerWidth) * 2 - 1;
       const y = (e.clientY / innerHeight) * 2 - 1;
       
-      // Reduce intensity on mobile
       const intensity = window.innerWidth < 768 ? 20 : 50;
       mouseX.set(x * intensity);
       mouseY.set(y * intensity);
@@ -80,7 +82,7 @@ export default function PinCluster() {
           >
             {/* The Pin */}
             <div className={`w-8 h-8 md:w-12 md:h-12 rounded-full ${pin.color} text-white flex items-center justify-center shadow-elite relative group-hover:scale-110 transition-transform`}>
-              <MapPin size={window?.innerWidth < 768 ? 16 : 24} strokeWidth={2.5} />
+              <MapPin size={isMobile ? 16 : 24} strokeWidth={2.5} />
               
               {/* Radar pulse effect */}
               <div className="absolute inset-0 rounded-full border border-white/30 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
