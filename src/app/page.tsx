@@ -7,6 +7,7 @@ import HeroLanding from "@/components/HeroLanding";
 import ScholarshipSection from "@/components/ScholarshipSection";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 // Dynamically import heavy components
 const CollegeBookExperience = dynamic(() => import("@/components/CollegeBookExperience"), { ssr: false });
@@ -41,6 +42,8 @@ export default function Home() {
           />
         )}
       </AnimatePresence>
+
+      <MobileBottomNav onExplore={() => setShowUniverse(true)} />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 import { GraduationCap, Laptop, Award } from "lucide-react";
+import { useDeviceOrientation } from "@/hooks/useDeviceOrientation";
 
 // Actual data for colleges
 export const colleges = [
@@ -15,7 +16,9 @@ export default function ScholarshipSection({ onCardClick }: { onCardClick: (id: 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const orientation = useDeviceOrientation();
+
+  const handlePointerMove = (e: React.PointerEvent) => {
     if (!sectionRef.current) return;
     const rect = sectionRef.current.getBoundingClientRect();
     setMousePos({
@@ -28,8 +31,8 @@ export default function ScholarshipSection({ onCardClick }: { onCardClick: (id: 
     <section 
       id="scholarships" 
       ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      className="relative py-40 container mx-auto px-10 max-w-7xl z-20 overflow-hidden"
+      onPointerMove={handlePointerMove}
+      className="relative py-40 container mx-auto px-10 max-w-7xl z-20 overflow-hidden touch-none"
     >
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
         
@@ -108,6 +111,7 @@ export default function ScholarshipSection({ onCardClick }: { onCardClick: (id: 
                   baseX={pos.x}
                   baseY={pos.y}
                   mouse={mousePos}
+                  orientation={orientation}
                   onClick={() => onCardClick(college.id)}
                 />
               );
@@ -120,10 +124,10 @@ export default function ScholarshipSection({ onCardClick }: { onCardClick: (id: 
 }
 
 // Sub-component for the "Bowling Pin" effect
-function BowlingPinCard({ college, baseX, baseY, mouse, onClick }: any) {
+function BowlingPinCard({ college, baseX, baseY, mouse, orientation, onClick }: any) {
   const cardRef = useRef<HTMLDivElement>(null);
   
-  // Calculate displacement based on mouse proximity (Bowling ball effect)
+  // Calculate displacement based on mouse/touch proximity (Bowling ball effect)
   const [displacement, setDisplacement] = useState({ x: 0, y: 0, rotate: 0 });
 
   useEffect(() => {
@@ -136,25 +140,35 @@ function BowlingPinCard({ college, baseX, baseY, mouse, onClick }: any) {
     const cardX = (baseX / 100) * rect.width;
     const cardY = (baseY / 100) * rect.height;
 
-    // Distance between mouse and card center
+    // Distance between mouse/touch and card center
     const dx = mouse.x - cardX;
     const dy = mouse.y - cardY;
     const distance = Math.sqrt(dx * dx + dy * dy);
     
     // Ripple/Displacement effect (Bowling ball pushing pins)
     const MAX_DIST = window.innerWidth < 768 ? 150 : 250;
+    
+    let targetX = 0;
+    let targetY = 0;
+    let targetRotate = 0;
+
     if (distance < MAX_DIST) {
       const power = (MAX_DIST - distance) / MAX_DIST;
       const angle = Math.atan2(dy, dx);
-      setDisplacement({
-        x: Math.cos(angle) * power * -30, // Push away
-        y: Math.sin(angle) * power * -30,
-        rotate: (dx / MAX_DIST) * 15 // Tilt based on side
-      });
-    } else {
-      setDisplacement({ x: 0, y: 0, rotate: 0 });
+      targetX = Math.cos(angle) * power * -30;
+      targetY = Math.sin(angle) * power * -30;
+      targetRotate = (dx / MAX_DIST) * 15;
     }
-  }, [mouse, baseX, baseY]);
+
+    // Add subtle tilt from device orientation (gyroscope)
+    if (orientation?.gamma !== null && orientation?.beta !== null) {
+      // Very subtle sway based on tilt
+      targetX += orientation.gamma * 0.2;
+      targetY += (orientation.beta - 45) * 0.2;
+    }
+
+    setDisplacement({ x: targetX, y: targetY, rotate: targetRotate });
+  }, [mouse, baseX, baseY, orientation]);
 
   return (
     <motion.div
@@ -167,6 +181,7 @@ function BowlingPinCard({ college, baseX, baseY, mouse, onClick }: any) {
       }}
       className="absolute w-[160px] md:w-[240px] cursor-pointer z-10 hover:z-40"
       style={{ top: `${baseY}%`, left: `${baseX}%`, transform: 'translate(-50%, -50%)' }}
+      whileTap={{ scale: 0.95 }}
       onClick={onClick}
     >
       <Tilt 

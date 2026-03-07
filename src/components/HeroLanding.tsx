@@ -50,10 +50,16 @@ export default function HeroLanding({ onExplore }: { onExplore?: () => void }) {
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 mt-4 md:mt-8 w-full sm:w-auto"
         >
-          <button onClick={onExplore} className="w-full sm:w-auto px-10 py-4 bg-foreground text-background dark:bg-primary dark:text-white rounded-full font-bold text-xs md:text-sm uppercase tracking-widest hover:translate-y-[-2px] transition-all shadow-elite">
+          <button 
+            onClick={onExplore} 
+            className="w-full sm:w-auto px-10 py-4 bg-foreground text-background dark:bg-primary dark:text-white rounded-full font-bold text-xs md:text-sm uppercase tracking-widest hover:translate-y-[-2px] active:translate-y-[1px] transition-all shadow-elite"
+          >
             Explore Universe
           </button>
-          <a href="#scholarships" className="w-full sm:w-auto px-10 py-4 rounded-full font-bold text-xs md:text-sm uppercase tracking-widest border border-border hover:bg-accent/30 transition-all text-center">
+          <a 
+            href="#scholarships" 
+            className="w-full sm:w-auto px-10 py-4 rounded-full font-bold text-xs md:text-sm uppercase tracking-widest border border-border hover:bg-accent/30 active:bg-accent/50 transition-all text-center"
+          >
             Scholarships
           </a>
         </motion.div>

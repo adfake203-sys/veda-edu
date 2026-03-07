@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { MapPin } from "lucide-react";
+import { useDeviceOrientation } from "@/hooks/useDeviceOrientation";
 
 const pinsData = [
   { id: 1, name: "IIT Madras", x: "15%", y: "25%", delay: 0.1, color: "bg-[#B08D57]" }, // Gold
@@ -17,14 +18,21 @@ const pinsData = [
 export default function PinCluster() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const orientation = useDeviceOrientation();
   
   // Mouse tracking for parallax
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
+  // Device orientation tracking
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+
   const springConfig = { damping: 25, stiffness: 150 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
+  const smoothTiltX = useSpring(tiltX, springConfig);
+  const smoothTiltY = useSpring(tiltY, springConfig);
 
   // Scroll tracking to transition pins into the grid
   const { scrollYProgress } = useScroll({
@@ -52,6 +60,16 @@ export default function PinCluster() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
+  useEffect(() => {
+    // Update tilt values based on orientation
+    if (orientation.gamma !== null && orientation.beta !== null) {
+      // Gamma is tilt left/right (-90 to 90), Beta is tilt front/back (-180 to 180)
+      // We'll normalize these for a subtle effect
+      tiltX.set(orientation.gamma * 0.5); 
+      tiltY.set((orientation.beta - 45) * 0.5); // Assuming 45 deg as neutral holding angle
+    }
+  }, [orientation, tiltX, tiltY]);
+
   return (
     <motion.div 
       ref={containerRef}
@@ -62,22 +80,28 @@ export default function PinCluster() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-transparent"></div>
       
       {pinsData.map((pin, i) => {
-        // Individual parallax offsets based on distance
+        // Combined parallax from both touch/mouse and device orientation
         const parallaxX = useTransform(smoothX, (v) => v * (1 + i * 0.15));
         const parallaxY = useTransform(smoothY, (v) => v * (1 + i * 0.15));
+        
+        const gParallaxX = useTransform(smoothTiltX, (v) => v * (1 + i * 0.2));
+        const gParallaxY = useTransform(smoothTiltY, (v) => v * (1 + i * 0.2));
 
         return (
           <motion.div
             key={pin.id}
             initial={{ scale: 0, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
+            whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", delay: 0.5 + pin.delay, bounce: 0.4 }}
             className="absolute flex flex-col items-center gap-2 group cursor-pointer"
             style={{ 
               left: pin.x, 
               top: pin.y,
               x: parallaxX,
-              y: parallaxY
+              y: parallaxY,
+              translateX: gParallaxX,
+              translateY: gParallaxY
             }}
           >
             {/* The Pin */}
