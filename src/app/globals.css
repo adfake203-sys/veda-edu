@@ -23,15 +23,15 @@
 }
 
 :root {
-  --background: #fbf8f2; /* Refined lighter cream */
-  --foreground: #121212; /* Deepest Charcoal for maximum contrast */
-  --primary: #7c6841;    /* Darkened Gold/Tan for contrast */
+  --background: #ffffff; /* Pure white for maximum contrast */
+  --foreground: #000000; /* Pure black for text */
+  --primary: #5c4b2c;    /* Even darker Gold/Tan */
   --primary-foreground: #ffffff;
-  --card: rgba(255, 255, 255, 0.6);
-  --card-foreground: #121212;
-  --border: #e2dbce;
-  --accent: #cec4b5;      /* Sand */
-  --glass-border: rgba(124, 104, 65, 0.15);
+  --card: rgba(255, 255, 255, 0.95);
+  --card-foreground: #000000;
+  --border: #d2cbb8;
+  --accent: #b5ac9d;      /* Darker Sand */
+  --glass-border: rgba(92, 75, 44, 0.25);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -7,11 +7,10 @@ import { Home, GraduationCap, Globe, Mail } from "lucide-react";
 const navItems = [
   { id: "home", label: "Home", icon: Home },
   { id: "scholarships", label: "Colleges", icon: GraduationCap },
-  { id: "explore", label: "Universe", icon: Globe, highlight: true },
   { id: "contact", label: "Contact", icon: Mail },
 ];
 
-export default function MobileBottomNav({ onExplore }: { onExplore: () => void }) {
+export default function MobileBottomNav() {
   const [activeTab, setActiveTab] = useState("home");
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -33,8 +32,8 @@ export default function MobileBottomNav({ onExplore }: { onExplore: () => void }
 
   const handleNavClick = (id: string) => {
     setActiveTab(id);
-    if (id === "explore") {
-      onExplore();
+    if (false) {
+      // reserved for future use
     } else {
       const element = document.getElementById(id);
       if (element) {
@@ -62,6 +61,7 @@ export default function MobileBottomNav({ onExplore }: { onExplore: () => void }
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
+                  suppressHydrationWarning
                   className="relative flex flex-col items-center justify-center gap-1 w-12"
                 >
                   <motion.div
@@ -71,7 +71,6 @@ export default function MobileBottomNav({ onExplore }: { onExplore: () => void }
                       color: isActive ? "var(--color-primary)" : "rgba(var(--color-foreground), 0.6)"
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className={`${item.highlight ? "text-primary bg-primary/10 p-2 rounded-xl" : ""}`}
                   >
                     <Icon size={20} />
                   </motion.div>

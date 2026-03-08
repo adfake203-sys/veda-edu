@@ -54,11 +54,11 @@ export default function ContactForm() {
             <div className="space-y-4 md:space-y-6 pt-8 md:pt-12 mt-8 md:mt-12 border-t border-white/10">
               <div className="flex items-center gap-3 md:gap-4">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center"><Phone size={16} /></div>
-                <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest">+91 98765 43210</div>
+                <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest">+91 81066 884488</div>
               </div>
               <div className="flex items-center gap-3 md:gap-4">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center"><Mail size={16} /></div>
-                <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest">admissions@veda.edu</div>
+                <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest">veda.edu.services01@gmail.com</div>
               </div>
             </div>
           </div>
@@ -87,6 +87,7 @@ export default function ContactForm() {
                        <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-foreground/75 ml-1">Full Name</label>
                       <input 
                         required
+                        suppressHydrationWarning
                         className="w-full bg-white/50 border border-border/50 rounded-xl px-4 md:px-5 py-3 md:py-4 text-xs md:text-sm focus:outline-none focus:border-primary/40 transition-all placeholder:text-foreground/20"
                         placeholder="Aristotle Smith"
                         value={formData.name}
@@ -97,6 +98,7 @@ export default function ContactForm() {
                        <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-foreground/75 ml-1">Phone Reference</label>
                       <input 
                         required
+                        suppressHydrationWarning
                         className="w-full bg-white/50 border border-border/50 rounded-xl px-4 md:px-5 py-3 md:py-4 text-xs md:text-sm focus:outline-none focus:border-primary/40 transition-all placeholder:text-foreground/20"
                         placeholder="+91 00000 00000"
                         value={formData.phone}
@@ -109,6 +111,7 @@ export default function ContactForm() {
                     <input 
                       required
                       type="email"
+                      suppressHydrationWarning
                       className="w-full bg-white/50 border border-border/50 rounded-xl px-4 md:px-5 py-3 md:py-4 text-xs md:text-sm focus:outline-none focus:border-primary/40 transition-all placeholder:text-foreground/20"
                       placeholder="admissions@university.edu"
                       value={formData.email}
@@ -120,6 +123,7 @@ export default function ContactForm() {
                       <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-foreground/75 ml-1">Residence State</label>
                       <input 
                         required
+                        suppressHydrationWarning
                         className="w-full bg-white/50 border border-border/50 rounded-xl px-4 md:px-5 py-3 md:py-4 text-xs md:text-sm focus:outline-none focus:border-primary/40 transition-all placeholder:text-foreground/20"
                         placeholder="Karnataka"
                         value={formData.state}
@@ -129,6 +133,7 @@ export default function ContactForm() {
                     <div className="space-y-1.5 md:space-y-2">
                       <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-foreground/75 ml-1">Pursuit of Interest</label>
                       <select 
+                        suppressHydrationWarning
                         className="w-full bg-white/50 border border-border/50 rounded-xl px-4 md:px-5 py-3 md:py-4 text-xs md:text-sm focus:outline-none focus:border-primary/40 transition-all appearance-none"
                         value={formData.course}
                         onChange={e => setFormData({...formData, course: e.target.value})}
@@ -143,6 +148,7 @@ export default function ContactForm() {
                   <button 
                     type="submit" 
                     disabled={status === 'loading'}
+                    suppressHydrationWarning
                     className="w-full bg-primary text-white py-3 md:py-4 rounded-xl font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs hover:bg-primary/90 transition-all shadow-elite disabled:opacity-50 mt-2 md:mt-4 h-[50px] md:h-[60px] flex items-center justify-center gap-3"
                   >
                     {status === 'loading' ? 'Transmitting...' : 'Confirm Consultation Request'}

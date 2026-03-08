@@ -54,7 +54,10 @@ export default function Navigation() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button className="hidden sm:block bg-primary text-white px-8 py-2.5 rounded-full text-[12px] font-bold uppercase tracking-wider hover:bg-primary/90 transition-all shadow-elite">
+            <button 
+              suppressHydrationWarning
+              className="hidden sm:block bg-primary text-white px-8 py-2.5 rounded-full text-[12px] font-bold uppercase tracking-wider hover:bg-primary/90 transition-all shadow-elite"
+            >
               Consultation
             </button>
             
@@ -100,6 +103,7 @@ export default function Navigation() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
+                suppressHydrationWarning
                 className="mt-10 bg-primary text-white py-4 rounded-xl font-bold uppercase tracking-[0.2em] text-xs shadow-elite"
               >
                 Book Consultation

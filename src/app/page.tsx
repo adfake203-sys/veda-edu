@@ -15,11 +15,10 @@ const ExploreUniverse = dynamic(() => import("@/components/ExploreUniverse"), { 
 
 export default function Home() {
   const [openBookId, setOpenBookId] = useState<number | null>(null);
-  const [showUniverse, setShowUniverse] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeroLanding onExplore={() => setShowUniverse(true)} />
+      <HeroLanding />
       
       <Reveal>
         <ScholarshipSection onCardClick={(id) => setOpenBookId(id)} />
@@ -31,19 +30,7 @@ export default function Home() {
 
       <CollegeBookExperience collegeId={openBookId} onClose={() => setOpenBookId(null)} />
       
-      <AnimatePresence>
-        {showUniverse && (
-          <ExploreUniverse 
-            onClose={() => setShowUniverse(false)} 
-            onOpenBook={(id) => {
-              setShowUniverse(false); // Close universe to show book cleanly on main page, or we could leave it open underneath
-              setOpenBookId(id);
-            }} 
-          />
-        )}
-      </AnimatePresence>
-
-      <MobileBottomNav onExplore={() => setShowUniverse(true)} />
+      <MobileBottomNav />
     </div>
   );
 }

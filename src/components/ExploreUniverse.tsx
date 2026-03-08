@@ -6,9 +6,9 @@ import { OrbitControls, Stars, Text, Image as DreiImage, Float } from "@react-th
 import { motion } from "framer-motion";
 import { X, MousePointerClick } from "lucide-react";
 import * as THREE from "three";
-import { colleges } from "./ScholarshipSection";
+import { colleges, College } from "@/data/colleges";
 
-function CollegeCard3D({ college, position, onClick }: any) {
+function CollegeCard3D({ college, position, onClick }: { college: College, position: [number, number, number], onClick: (id: number) => void }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHover] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -105,7 +105,7 @@ export default function ExploreUniverse({
         {/* Space Environment - Warmer/Elite space */}
         <color attach="background" args={['#0c0c0c']} />
         <fog attach="fog" args={['#0c0c0c', 10, 60]} />
-        <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
+        <Stars radius={100} depth={50} count={isMobile ? 1000 : 3000} factor={4} saturation={0} fade speed={1} />
         
         <ambientLight intensity={0.8} />
         <pointLight position={[10, 10, 10]} intensity={2} color="#8c7851" />
@@ -122,7 +122,7 @@ export default function ExploreUniverse({
           rotateSpeed={isMobile ? 0.5 : 1}
         />
 
-        {colleges.map((college, i) => {
+        {colleges.map((college: College, i: number) => {
           const phi = Math.acos(-1 + (2 * i) / colleges.length);
           const theta = Math.sqrt(colleges.length * Math.PI) * phi;
           const r = isMobile ? 10 + Math.random() * 3 : 12 + Math.random() * 2;
