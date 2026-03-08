@@ -264,7 +264,7 @@ export const colleges: College[] = [
       "Dedicated Placement Cell for Healthcare & IT"
     ],
     stats: {
-      highestPackage: "₹10.0 LPA",
+      highestPackage: "₹15.0 LPA",
       averagePackage: "₹4.5 LPA",
       placementRate: "100% Assistance"
     },
@@ -312,7 +312,7 @@ export const colleges: College[] = [
         title: "Placement Stats",
         type: 'stats',
         content: {
-          highest: "10.0 LPA",
+          highest: "15.0 LPA",
           average: "4.5 LPA",
           rate: "100% Placement Assistance"
         }

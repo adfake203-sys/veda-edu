@@ -69,7 +69,7 @@ export default function HeroLanding() {
         initial={{ opacity: 0, scale: 0.95, x: 50 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
         transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-        className="w-full lg:w-2/5 aspect-[4/5] lg:aspect-square rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/20 shadow-[-20px_40px_80px_rgba(0,0,0,0.1)] relative group"
+        className="hidden lg:flex w-full lg:w-2/5 aspect-[4/5] lg:aspect-square rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/20 shadow-[-20px_40px_80px_rgba(0,0,0,0.1)] relative group"
       >
         <img 
           src="/images/hero-bg.png" 
